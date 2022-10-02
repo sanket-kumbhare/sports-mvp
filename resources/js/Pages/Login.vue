@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center justify-center h-screen">
-        <div class="block p-6 rounded-lg shadow-lg bg-white max-w-">
+        <div class="block p-6 rounded-lg shadow-lg bg-white max-w-md">
             <form>
                 <div class="form-group mb-6">
                     <label

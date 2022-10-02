@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SportController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -15,10 +16,12 @@ use Inertia\Inertia;
 |
 */
 
-Route::get('/', function() {
+Route::get('/', function () {
     return Inertia::render('Login');
 });
 
-Route::get('/register', function() {
+Route::get('/register', function () {
     return Inertia::render('Register');
 });
+
+Route::resource('/admin-panel/sport', SportController::class);

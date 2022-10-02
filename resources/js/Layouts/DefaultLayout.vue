@@ -4,7 +4,7 @@ import Navbar from "@/Shared/Navbar.vue";
 
 <template>
     <Navbar />
-    <main class="bg-gray-200">
+    <main class="bg-gray-100 min-h-screen">
         <slot />
     </main>
 </template>
