@@ -1,32 +1,40 @@
+<script setup>
+import InputLabel from "@/Components/InputLabel.vue";
+import InputField from "@/Components/InputField.vue";
+import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
+
+const form = useForm({
+    email: "",
+    password: "",
+});
+
+const submit = () => {
+    form.post(route("login"), {
+        onFinish: () => form.reset("password"),
+    });
+};
+</script>
+
 <template>
     <div class="flex items-center justify-center h-screen">
         <div class="block p-6 rounded-lg shadow-lg bg-white max-w-md">
-            <form>
+            <form @submit.prevent="submit">
                 <div class="form-group mb-6">
-                    <label
-                        for="exampleInputEmail2"
-                        class="form-label inline-block mb-2 text-gray-700"
-                        >Email address</label
-                    >
-                    <input
+                    <InputLabel label="Email" inputid="email" />
+                    <InputField
                         type="email"
-                        class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                        id="exampleInputEmail2"
-                        aria-describedby="emailHelp"
                         placeholder="Enter email"
+                        id="email"
+                        v-model="form.email"
                     />
                 </div>
                 <div class="form-group mb-6">
-                    <label
-                        for="exampleInputPassword2"
-                        class="form-label inline-block mb-2 text-gray-700"
-                        >Password</label
-                    >
-                    <input
+                    <InputLabel label="Password" inputid="pass" />
+                    <InputField
                         type="password"
-                        class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                        id="exampleInputPassword2"
-                        placeholder="Password"
+                        placeholder="Enter password"
+                        id="pass"
+                        v-model="form.password"
                     />
                 </div>
                 <div class="flex justify-between space-x-16 items-center mb-6">
@@ -56,10 +64,10 @@
                 </button>
                 <p class="text-gray-800 mt-6 text-center">
                     Not a member?
-                    <a
-                        href="#!"
+                    <Link
+                        href="/register"
                         class="text-blue-600 hover:text-blue-700 focus:text-blue-700 transition duration-200 ease-in-out"
-                        >Register</a
+                        >Register</Link
                     >
                 </p>
             </form>
