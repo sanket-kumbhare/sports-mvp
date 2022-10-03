@@ -3,7 +3,6 @@ import InputField from "@/Components/InputField.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import FormButton from "@/Components/FormButton.vue";
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
-import { Inertia } from "@inertiajs/inertia";
 
 const form = useForm({
     sport: "",
