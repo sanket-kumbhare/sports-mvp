@@ -41,4 +41,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * The sports that belong to the user.
+     */
+    // public function sports()
+    // {
+    //     return $this->belongsToMany(Sport::class, 'subscription');
+    // }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\SportController;
+use App\Http\Controllers\SubscriptionController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -32,7 +33,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store'])->name('login');
+    Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');
@@ -69,9 +70,11 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/admin-panel/sport', SportController::class);
 
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    });
+    Route::get('/dashboard',[SportController::class, 'showDashboard']);
+
+    Route::post('/subscribe',[SubscriptionController::class, 'subscribe']);
+
+    Route::post('/unsubscribe',[SubscriptionController::class, 'unsubscribe']);
 });
 
 Route::get('/', function () {
