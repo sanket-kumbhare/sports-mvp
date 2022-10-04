@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSportRequest;
 use App\Models\Sport;
+use App\Models\Subscription;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class SportController extends Controller
@@ -50,8 +53,6 @@ class SportController extends Controller
             ->insert([
                 'sport' => $request['sport'],
             ]);
-
-        return redirect('/admin-panel/sport');
     }
 
     /**
@@ -96,8 +97,29 @@ class SportController extends Controller
      */
     public function destroy(Sport $sport)
     {
-        //
         $sport->delete();
-        return redirect('/admin-panel/sport');
+    }
+ 
+    /**
+     * Show sports on Dashboard.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function showDashboard()
+    {
+        $user = User::query()
+            ->find(Auth::user()->id);
+
+        $sports = Sport::all();
+
+        $subscriptions = $user->sports->map(function ($sport) {
+            return $sport->id;
+        });
+
+        return Inertia::render('Dashboard', [
+            'sports' => $sports,
+            'subscriptions' => $subscriptions
+        ]);
     }
 }

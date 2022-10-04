@@ -15,7 +15,7 @@ defineProps({
         >
             <a class="text-xl text-black" href="#">Sports MVP</a>
 
-            <div class="dropdown relative">
+            <div v-if="auth.user" class="dropdown relative">
                 <a
                     class="dropdown-toggle px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg active:text-white transition duration-150 ease-in-out flex items-center whitespace-nowrap"
                     href="#"
@@ -46,10 +46,10 @@ defineProps({
                     aria-labelledby="dropdownMenuButton2"
                 >
                     <li>
-                        <a
+                        <Link
                             class="dropdown-item text-sm py-2 px-4 font-normal block w-full whitespace-nowrap bg-transparent text-gray-700 hover:bg-gray-100"
-                            href="#"
-                            >Admin Panel</a
+                            href="/admin-panel/sport"
+                            >Admin Panel</Link
                         >
                     </li>
                     <li>
@@ -65,7 +65,7 @@ defineProps({
             </div>
 
             <button
-                v-if="!auth"
+                v-if="!auth.user"
                 class="navbar-toggler text-gray-500 border-0 hover:shadow-none hover:no-underline py-2 px-2.5 bg-transparent focus:outline-none focus:ring-0 focus:shadow-none focus:no-underline"
                 type="button"
                 data-bs-toggle="collapse"
@@ -91,7 +91,7 @@ defineProps({
                 </svg>
             </button>
             <div
-                v-if="!auth"
+                v-if="!auth.user"
                 class="collapse navbar-collapse items-center"
                 id="navbarSupportedContent"
             >
