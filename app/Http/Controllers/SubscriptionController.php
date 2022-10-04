@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {
+    /**
+     * Subscribe.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
     public function subscribe(Request $request) {
         $user_id = Auth::user()->id;
         $user = User::query()->find($user_id);
@@ -16,6 +21,11 @@ class SubscriptionController extends Controller
         $user->sports()->attach($sport);
     }
 
+    /**
+     * Unsubscribe.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
     public function unsubscribe(Request $request) {
         $user_id = Auth::user()->id;
         $user = User::query()->find($user_id);

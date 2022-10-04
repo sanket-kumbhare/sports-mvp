@@ -1,9 +1,13 @@
 <script setup>
 import { Link } from "@inertiajs/inertia-vue3";
+import { computed } from "vue";
 
 defineProps({
     sport: Object,
+    subscriptions: Object,
 });
+
+let subscribed = computed(() => subscriptions.includes(sport.id));
 </script>
 
 <template>
@@ -17,6 +21,7 @@ defineProps({
                 month.
             </p>
             <Link
+                v-if="!this.subscriptions.includes(this.sport.id)"
                 :data="{ sport_id: sport.id }"
                 method="post"
                 href="/subscribe"
@@ -26,6 +31,7 @@ defineProps({
                 Subscribe
             </Link>
             <Link
+                v-else
                 :data="{ sport_id: sport.id }"
                 method="post"
                 href="/unsubscribe"

@@ -45,8 +45,8 @@ class User extends Authenticatable
     /**
      * The sports that belong to the user.
      */
-    // public function sports()
-    // {
-    //     return $this->belongsToMany(Sport::class, 'subscription');
-    // }
+    public function sports()
+    {
+        return $this->belongsToMany(Sport::class, 'subscriptions');
+    }
 }
