@@ -2,6 +2,7 @@
 import InputField from "@/Components/InputField.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import FormButton from "@/Components/FormButton.vue";
+// import Chart from "@/Components/Chart.vue";
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 
 const form = useForm({
@@ -10,6 +11,7 @@ const form = useForm({
 
 defineProps({
     sports: Object,
+    can : Object,
 });
 
 const submit = () => {
@@ -40,7 +42,9 @@ const submit = () => {
                 <FormButton type="submit" value="Add Sport" />
             </form>
         </div>
-        <div class="row-span-2 bg-green-500">graph region</div>
+        <div class="block row-span-2 p-6 rounded-lg shadow-lg bg-white">
+            <Chart />
+        </div>
         <div
             class="block row-span-3 p-6 col-span-2 rounded-lg shadow-lg bg-white overflow-y-auto overflow-x-hidden"
         >
@@ -62,6 +66,12 @@ const submit = () => {
                                             class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
                                         >
                                             Sport Name
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                                        >
+                                            Subscriber
                                         </th>
                                         <th
                                             colspan="2"
@@ -86,11 +96,12 @@ const submit = () => {
                                         <td
                                             class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
                                         >
-                                            <input
-                                                class="border-none"
-                                                type="text"
-                                                :value="sport.sport"
-                                            />
+                                            {{ sport.sport }}
+                                        </td>
+                                        <td
+                                            class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+                                        >
+                                            {{ sport.users_count }}
                                         </td>
                                         <td
                                             class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"

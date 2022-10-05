@@ -19,11 +19,15 @@ class SportController extends Controller
      */
     public function index()
     {
-        $sports = Sport::all();
+        $sports = Sport::query();
+        // dd(Auth::user()->email);
         return Inertia::render(
             'AdminPanel',
             [
-                'sports' => $sports,
+                'sports' => $sports->withCount('users')->get(),
+                'can' => [
+                    'createSport' => Auth::user()->can('create', Sport::class),
+                ]
             ]
         );
     }
@@ -99,7 +103,7 @@ class SportController extends Controller
     {
         $sport->delete();
     }
- 
+
     /**
      * Show sports on Dashboard.
      *
@@ -119,7 +123,7 @@ class SportController extends Controller
 
         return Inertia::render('Dashboard', [
             'sports' => $sports,
-            'subscriptions' => $subscriptions
+            'subscriptions' => $subscriptions,
         ]);
     }
 }
