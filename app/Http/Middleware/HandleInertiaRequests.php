@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Sport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
 
@@ -34,9 +36,14 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request)
     {
+        $permission = false;
+        if (Auth::user()) {
+            $permission = Auth::user()->can('create', Sport::class);
+        }
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
+                'permission' => $permission,
             ],
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
