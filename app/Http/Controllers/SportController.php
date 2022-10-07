@@ -8,6 +8,7 @@ use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
 class SportController extends Controller
@@ -19,11 +20,12 @@ class SportController extends Controller
      */
     public function index()
     {
-        $sports = Sport::all();
+        $sports = Sport::query();
+        // dd(Auth::user()->email);
         return Inertia::render(
             'AdminPanel',
             [
-                'sports' => $sports,
+                'sports' => $sports->withCount('users')->get(),
             ]
         );
     }
@@ -63,7 +65,21 @@ class SportController extends Controller
      */
     public function show(Sport $sport)
     {
-        //
+        $users = Sport::query()
+            ->find($sport->id)
+            ->users()
+            ->get();
+
+        return Inertia::render(
+            'ShowUser',
+            ['users' => $users->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                ];
+            })]
+        );;
     }
 
     /**
@@ -74,7 +90,12 @@ class SportController extends Controller
      */
     public function edit(Sport $sport)
     {
-        //
+        return Inertia::render(
+            'UpdateSport',
+            [
+                'sport' => $sport
+            ]
+        );
     }
 
     /**
@@ -86,7 +107,9 @@ class SportController extends Controller
      */
     public function update(Request $request, Sport $sport)
     {
-        dd($sport);
+        $sport->sport = $request->sport;
+        $sport->save();
+        return redirect('/admin-panel/sport');
     }
 
     /**
@@ -99,7 +122,7 @@ class SportController extends Controller
     {
         $sport->delete();
     }
- 
+
     /**
      * Show sports on Dashboard.
      *
@@ -119,7 +142,7 @@ class SportController extends Controller
 
         return Inertia::render('Dashboard', [
             'sports' => $sports,
-            'subscriptions' => $subscriptions
+            'subscriptions' => $subscriptions,
         ]);
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\SportController;
 use App\Http\Controllers\SubscriptionController;
+use App\Models\Sport;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -68,7 +69,7 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 
-    Route::resource('/admin-panel/sport', SportController::class);
+    Route::resource('/admin-panel/sport', SportController::class)->middleware('can:create', Sport::class);
 
     Route::get('/dashboard',[SportController::class, 'showDashboard']);
 

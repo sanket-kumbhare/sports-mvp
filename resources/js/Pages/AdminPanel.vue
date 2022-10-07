@@ -2,7 +2,11 @@
 import InputField from "@/Components/InputField.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import FormButton from "@/Components/FormButton.vue";
+// import Chart from "@/Components/Chart.vue";
+import { Inertia } from "@inertiajs/inertia";
+import Modal from "@/Components/Modal.vue";
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
+import { reactive } from "vue";
 
 const form = useForm({
     sport: "",
@@ -10,6 +14,7 @@ const form = useForm({
 
 defineProps({
     sports: Object,
+    can: Object,
 });
 
 const submit = () => {
@@ -23,6 +28,10 @@ const submit = () => {
 //         Inertia.delete(`/admin-panel/sport/${id}`);
 //     }
 // };
+
+const showUser = (id) => {
+    Inertia.get(`/admin-panel/sport/${id}`);
+};
 </script>
 
 <template>
@@ -40,7 +49,9 @@ const submit = () => {
                 <FormButton type="submit" value="Add Sport" />
             </form>
         </div>
-        <div class="row-span-2 bg-green-500">graph region</div>
+        <!-- <div class="block row-span-2 p-6 rounded-lg shadow-lg bg-white">
+            <Chart />
+        </div> -->
         <div
             class="block row-span-3 p-6 col-span-2 rounded-lg shadow-lg bg-white overflow-y-auto overflow-x-hidden"
         >
@@ -62,6 +73,12 @@ const submit = () => {
                                             class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
                                         >
                                             Sport Name
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            class="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+                                        >
+                                            Subscriber
                                         </th>
                                         <th
                                             colspan="2"
@@ -86,25 +103,35 @@ const submit = () => {
                                         <td
                                             class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
                                         >
-                                            <input
-                                                class="border-none"
-                                                type="text"
-                                                :value="sport.sport"
-                                            />
+                                            {{ sport.sport }}
+                                        </td>
+                                        <td
+                                            class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+                                        >
+                                            <!-- Button trigger modal -->
+                                            <button
+                                                type="button"
+                                                @click="showUser(sport.id)"
+                                                class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#exampleModalLong"
+                                            >
+                                                {{ sport.users_count }}
+                                            </button>
                                         </td>
                                         <td
                                             class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
                                         >
                                             <Link
-                                                :href="`/admin-panel/sport/${sport.id}`"
-                                                method="put"
+                                                :href="`/admin-panel/sport/${sport.id}/edit`"
+                                                method="get"
                                                 as="button"
                                             >
                                                 Edit
                                             </Link>
                                         </td>
                                         <td
-                                            class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap"
+                                            class="text-sm text-red-500 font-light px-6 py-4 whitespace-nowrap"
                                         >
                                             <Link
                                                 :href="`/admin-panel/sport/${sport.id}`"
