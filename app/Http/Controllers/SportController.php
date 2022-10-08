@@ -120,7 +120,8 @@ class SportController extends Controller
      */
     public function destroy(Sport $sport)
     {
-        $sport->delete();
+        // $sport->delete();
+        return back();
     }
 
     /**
