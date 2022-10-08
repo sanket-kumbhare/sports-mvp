@@ -1,64 +1,100 @@
 <script setup>
+import { ref } from 'vue'
+import {
+    TransitionRoot,
+    TransitionChild,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+} from '@headlessui/vue'
+import UserTable from "@/Components/UserTable.vue";
+import InputField from "@/Components/InputField.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import FormButton from "@/Components/FormButton.vue";
+import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
+
 defineProps({
-    users: Object,
+    button: String,
+    selectedSport: Object,
+    sport: Object,
 });
+
+const isOpen = ref(false)
+
+function closeModal() {
+    isOpen.value = false
+}
+
+function openModal() {
+    isOpen.value = true
+}
+const form = useForm({
+    sport: props.sport.sport,
+});
+
+const submit = () => {
+    form.put(`/admin-panel/sport/${props.sport.id}`, {
+        onFinish: () => form.reset("sport"),
+    });
+};
 </script>
 
 <template>
-    <div
-        class="modal fade fixed top-0 left-0 hidden w-full h-full outline-none overflow-x-hidden overflow-y-auto"
-        id="exampleModalLong"
-        tabindex="-1"
-        aria-labelledby="exampleModalLongLabel"
-        aria-hidden="true"
-    >
-        <div class="modal-dialog relative w-auto pointer-events-none">
-            <div
-                class="modal-content border-none shadow-lg relative flex flex-col w-full pointer-events-auto bg-white bg-clip-padding rounded-md outline-none text-current"
-            >
-                <div
-                    class="modal-header flex flex-shrink-0 items-center justify-between p-4 border-b border-gray-200 rounded-t-md"
-                >
-                    <h5
-                        class="text-xl font-medium leading-normal text-gray-800"
-                        id="exampleModalLongLabel"
-                    >
-                        Modal title
-                    </h5>
-                    <button
-                        type="button"
-                        class="btn-close box-content w-4 h-4 p-1 text-black border-none rounded-none opacity-50 focus:shadow-none focus:outline-none focus:opacity-100 hover:text-black hover:opacity-75 hover:no-underline"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"
-                    ></button>
-                </div>
-                <div class="modal-body relative p-4" style="min-height: 1500px">
-                    This is some placeholder content to show the scrolling
-                    behavior for modals. Instead of repeating the text the
-                    modal, we use an inline style set a minimum height, thereby
-                    extending the length of the overall modal and demonstrating
-                    the overflow scrolling. When content becomes longer than the
-                    height of the viewport, scrolling will move the modal as
-                    needed.
-                </div>
-                <div
-                    class="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md"
-                >
-                    <button
-                        type="button"
-                        class="inline-block px-6 py-2.5 bg-purple-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800 active:shadow-lg transition duration-150 ease-in-out"
-                        data-bs-dismiss="modal"
-                    >
-                        Close
-                    </button>
-                    <button
-                        type="button"
-                        class="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out ml-1"
-                    >
-                        Save changes
-                    </button>
+    <div class="fixed inset-0 flex items-center justify-center">
+        <button type="button" @click="openModal"
+            class="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+            {{button}}
+        </button>
+    </div>
+    <TransitionRoot appear :show="isOpen" as="template">
+        <Dialog as="div" @close="closeModal" class="relative z-10">
+            <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
+                leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
+                <div class="fixed inset-0 bg-black bg-opacity-25" />
+            </TransitionChild>
+
+            <div class="fixed inset-0 overflow-y-auto">
+                <div class="flex min-h-full items-center justify-center p-4 text-center">
+                    <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0 scale-95"
+                        enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
+                        leave-to="opacity-0 scale-95">
+                        <DialogPanel
+                            class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                            <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+                                Payment successful
+                            </DialogTitle>
+                            <div class="mt-2">
+                                <div v-if="selectedSport">
+                                    <UserTable :selectedSport="selectedSport" />
+                                </div>
+                                <div v-else>
+                                    <div class="block row-span-1 p-6 rounded-lg shadow-lg bg-white">
+                                        <form @submit.prevent="submit">
+                                            <div class="form-group mb-6">
+                                                <InputLabel label="Sport" />
+                                                <InputField type="text" placeholder="Enter sports name"
+                                                    v-model="form.sport" />
+                                            </div>
+                                            <FormButton type="submit" value="Add Sport" />
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4">
+                                <button type="button"
+                                    class="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                    @click="closeModal">
+                                    Got it, thanks!
+                                </button>
+                            </div>
+                        </DialogPanel>
+                    </TransitionChild>
                 </div>
             </div>
-        </div>
-    </div>
+        </Dialog>
+    </TransitionRoot>
 </template>
+  
+
+  

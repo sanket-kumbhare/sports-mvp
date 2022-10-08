@@ -21,11 +21,13 @@ class SportController extends Controller
     public function index()
     {
         $sports = Sport::query();
-        // dd(Auth::user()->email);
         return Inertia::render(
             'AdminPanel',
             [
-                'sports' => $sports->withCount('users')->get(),
+                'sports' => $sports
+                    ->with('users')
+                    ->withCount('users')
+                    ->get(),
             ]
         );
     }
@@ -71,7 +73,7 @@ class SportController extends Controller
             ->get();
 
         return Inertia::render(
-            'ShowUser',
+            'AdminPanel',
             ['users' => $users->map(function ($user) {
                 return [
                     'id' => $user->id,
