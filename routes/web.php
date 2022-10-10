@@ -69,7 +69,8 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 
-    Route::resource('/admin-panel/sport', SportController::class)->middleware('can:create,App\Models\Sport');;
+
+    Route::resource('/admin-panel/sport', SportController::class)->middleware('can:create,App\Models\Sport');
 
     Route::get('/dashboard',[SportController::class, 'showDashboard']);
 
